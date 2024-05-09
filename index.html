@@ -1,0 +1,122 @@
+//variáveis da Bola
+let xBola = 100;
+let yBola = 200;
+let diametro = 23;
+let raio = diametro / 2;
+
+//velocidade da Bola
+let velocidadeXBola = 6;
+let velocidadeYBola = 6;
+
+//variáveis do Pau
+let xPau = 5;
+let yPau = 150;
+let PauComprimento = 10;
+let PauAltura = 90;
+
+//variaveis do oponete
+let xPauRival = 585;
+let yPauRival = 150;
+let velocidadeYRival;
+
+//pontuação
+let meusPontos = 0;
+let pontosRivais = 0;
+
+let colidiu = false;
+
+function setup() {
+  createCanvas(600, 400);
+}
+
+function draw() {
+  background(0);
+  mostraBola();
+  movimentaBola();
+  verificaColisaoBorda();
+  mostraPau(xPau, yPau);
+  mostraPau(xPauRival, yPauRival);
+  movimentaMeuPau();
+  movimentaPauRival();
+  verificaColisaoPau(xPauRival, yPauRival);
+  verificaColisaoPau(xPau, yPau);
+  placar();
+  addPonto();
+  bolaSolta();
+}
+
+function mostraBola() {
+  circle(xBola, yBola, diametro);
+}
+
+function movimentaBola() {
+  xBola += velocidadeXBola;
+  yBola += velocidadeYBola;
+}
+
+function verificaColisaoBorda() {
+  if (xBola + raio > width || xBola - raio < 0) {
+    velocidadeXBola *= -1;
+  }
+  if (yBola + raio > height || yBola - raio < 0) {
+    velocidadeYBola *= -1;
+  }
+}
+
+function mostraPau(x,y) {
+  rect(x, y, PauComprimento, PauAltura);
+}
+
+function movimentaMeuPau() {
+  if(keyIsDown(UP_ARROW)) {
+    yPau -= 10;
+  }
+  if(keyIsDown(DOWN_ARROW)) {
+    yPau += 10;
+  }
+}
+
+function verificaColisaoPau(x, y) {
+    colidiu = collideRectCircle(x, y, PauComprimento, PauAltura, xBola, yBola, raio);
+    if (colidiu){
+        velocidadeXBola *= -1;
+    }
+}
+
+function movimentaPauRival() {
+    if (keyIsDown(87)){
+        yPauRival -= 10;
+    }
+    if (keyIsDown(83)){
+        yPauRival += 10;
+    }
+}
+
+function placar() {
+  stroke(225)
+  textAlign(CENTER);
+  textSize(16);
+  fill(color(225, 140, 0));
+  rect(150, 10, 40, 20);
+  fill(225);
+  text(meusPontos, 170, 26);
+  fill(color(225, 140, 0));
+  rect(450, 10, 40, 20);
+  fill(225);
+  text(pontosRivais, 470, 26);
+}
+
+function addPonto() {
+  if(xBola > 590) {
+    meusPontos += 1;
+  }
+  if(xBola < 15) {
+    pontosRivais += 1;
+  }
+}
+
+function bolaSolta() {
+  if(xBola - raio < 0) {
+    xBola =  23
+  }
+}
